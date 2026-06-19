@@ -1,0 +1,7 @@
+node_modules/
+target/
+
+# Sensitive and internal files
+frontend/.env
+KasChain_Roadmap_Sabuk.md
+design.md

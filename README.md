@@ -81,5 +81,25 @@ cd contracts/kaschain
 cargo build --target wasm32-unknown-unknown --release
 ```
 
+## 📸 Screenshots (Submission Requirements)
+
+Berikut adalah tangkapan layar yang menunjukkan fungsionalitas utama aplikasi pada tahap ini:
+
+### 1. Wallet Connected State
+*(Menunjukkan antarmuka setelah Freighter Wallet berhasil terhubung, menampilkan Public Key pengguna)*
+![Wallet Connected](./wallet.png) <!-- Ganti dengan screenshot dompet terhubung Anda -->
+
+### 2. Balance Displayed
+*(Menunjukkan saldo XLM terkini yang ditarik secara real-time dari jaringan Testnet setelah menekan tombol "Fund Testnet" atau dihubungkan)*
+![Balance Displayed](./balance.png) <!-- Ganti dengan screenshot saldo dompet Anda -->
+
+### 3. Successful Testnet Transaction
+*(Menunjukkan proses pengisian form "Send Assets" atau formulir pengiriman transaksi XLM ke alamat lain)*
+![Successful Transaction](./transaction-form.png) <!-- Ganti dengan screenshot form transaksi Anda yang telah diisi -->
+
+### 4. Transaction Result Shown to the User
+*(Menunjukkan toast/notifikasi berhasil berisi Transaction Hash yang menandakan transaksi masuk ke blockchain)*
+![Transaction Result](./transaction-result.png) <!-- Ganti dengan screenshot toast berhasil transaksi Anda -->
+
 ---
 *KasChain — Mewujudkan transparansi finansial bagi setiap komunitas melalui kekuatan AI dan Web3.*

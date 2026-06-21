@@ -1,9 +1,39 @@
-import { Keypair, Horizon, TransactionBuilder, Networks, Asset, Operation } from '@stellar/stellar-sdk';
-import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
+import { Keypair, Horizon, TransactionBuilder, Networks as SDKNetworks, Asset, Operation } from '@stellar/stellar-sdk';
+import {
+  StellarWalletsKit,
+  Networks,
+} from '@creit.tech/stellar-wallets-kit';
+import { FreighterModule } from '@creit.tech/stellar-wallets-kit/modules/freighter';
+import { xBullModule } from '@creit.tech/stellar-wallets-kit/modules/xbull';
+import { AlbedoModule } from '@creit.tech/stellar-wallets-kit/modules/albedo';
+
+export const FREIGHTER_ID = 'freighter';
+export const XBULL_ID = 'xbull';
+export const ALBEDO_ID = 'albedo';
+
+export const WALLETS = {
+  FREIGHTER: FREIGHTER_ID,
+  XBULL: XBULL_ID,
+  ALBEDO: ALBEDO_ID,
+};
 
 const horizonUrl = import.meta.env.VITE_HORIZON_URL || 'https://horizon-testnet.stellar.org';
-const networkPassphrase = import.meta.env.VITE_STELLAR_NETWORK === 'PUBLIC' ? Networks.PUBLIC : Networks.TESTNET;
+const isPublic = import.meta.env.VITE_STELLAR_NETWORK === 'PUBLIC';
+const networkPassphrase = isPublic ? SDKNetworks.PUBLIC : SDKNetworks.TESTNET;
+const kitNetwork = isPublic ? Networks.PUBLIC : Networks.TESTNET;
 const server = new Horizon.Server(horizonUrl);
+
+StellarWalletsKit.init({
+  network: kitNetwork,
+  selectedWalletId: FREIGHTER_ID,
+  modules: [
+    new FreighterModule(),
+    new xBullModule(),
+    new AlbedoModule()
+  ]
+});
+
+export const kit = StellarWalletsKit;
 
 export const generateWallet = () => {
   const keypair = Keypair.random();
@@ -13,16 +43,16 @@ export const generateWallet = () => {
   };
 };
 
-export const connectFreighter = async () => {
-  const connectedStatus = await isConnected();
-  if (connectedStatus.isConnected) {
-    const access = await requestAccess();
-    if (access.error) {
-      throw new Error(access.error);
-    }
-    return access.address;
+export const connectWallet = async () => {
+  try {
+    // kit.authModal() opens the kit's built-in UI for users to select their wallet
+    // It handles the connection and returns the selected address
+    const { address } = await kit.authModal();
+    return address;
+  } catch (e) {
+    console.error("Wallet connection error:", e);
+    throw new Error("Wallet connection failed: " + (e.message || "Make sure the wallet extension is installed."));
   }
-  throw new Error("Freighter wallet is not connected atau belum diinstall.");
 };
 
 export const fundWithFriendbot = async (publicKey) => {
@@ -44,31 +74,45 @@ export const getBalance = async (publicKey) => {
 };
 
 export const sendTransaction = async (sourcePublicKey, destinationPublicKey, amount) => {
-  const account = await server.loadAccount(sourcePublicKey);
-  
-  const transaction = new TransactionBuilder(account, {
-    fee: await server.fetchBaseFee(),
-    networkPassphrase,
-  })
-    .addOperation(Operation.payment({
-      destination: destinationPublicKey,
-      asset: Asset.native(),
-      amount: amount.toString(),
-    }))
-    .setTimeout(30)
-    .build();
+  try {
+    const account = await server.loadAccount(sourcePublicKey);
+    
+    const transaction = new TransactionBuilder(account, {
+      fee: await server.fetchBaseFee(),
+      networkPassphrase,
+    })
+      .addOperation(Operation.payment({
+        destination: destinationPublicKey,
+        asset: Asset.native(),
+        amount: amount.toString(),
+      }))
+      .setTimeout(30)
+      .build();
 
-  // Sign dengan Freighter
-  const signResult = await signTransaction(transaction.toXDR(), {
-    networkPassphrase,
-  });
-
-  if (signResult.error) {
-    throw new Error(signResult.error);
+    const result = await kit.signTransaction(transaction.toXDR(), {
+      networkPassphrase,
+      address: sourcePublicKey
+    });
+    
+    const signedTxXdr = result.signedTxXdr;
+    
+    const transactionToSubmit = TransactionBuilder.fromXDR(signedTxXdr, networkPassphrase);
+    const response = await server.submitTransaction(transactionToSubmit);
+    return response;
+  } catch (error) {
+    const errMsg = error?.message?.toLowerCase() || "";
+    
+    // Check 3 error types specified in requirements
+    if (error?.response?.status === 400 || error?.response?.data?.extras?.result_codes?.operations?.includes("op_underfunded") || errMsg.includes("underfunded")) {
+      throw new Error("Insufficient balance");
+    }
+    if (errMsg.includes("reject") || errMsg.includes("decline") || errMsg.includes("user declined") || errMsg.includes("cancelled")) {
+      throw new Error("Signature rejected by user");
+    }
+    if (errMsg.includes("timeout") || error?.code === "ETIMEDOUT") {
+      throw new Error("Network timeout");
+    }
+    
+    throw new Error(error.message || "An error occurred while sending the transaction");
   }
-
-  // Submit ke Horizon
-  const transactionToSubmit = TransactionBuilder.fromXDR(signResult.signedTxXdr, networkPassphrase);
-  const response = await server.submitTransaction(transactionToSubmit);
-  return response;
 };

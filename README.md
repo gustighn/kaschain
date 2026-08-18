@@ -31,7 +31,7 @@ By combining artificial intelligence to facilitate data input through natural co
 KasChain is built incrementally using the Rise In Belt progression system:
 
 1. **⚪️ White Belt (Foundation):** Wallet creation, basic Stellar interactions (Friendbot, balance check, send XLM).
-2. **🟡 Yellow Belt (Integration):** Addition of basic AI Chat (Gemini), Firestore integration, and basic transaction logging *Smart Contract* (`TransactionLogger`).
+2. **🟡 Yellow Belt (Integration):** [COMPLETED] Addition of basic AI Chat (Gemini), Firestore integration, and basic transaction logging *Smart Contract* (`TransactionLogger`).
 3. **🟠 Orange Belt (Shared Treasury):** Decentralized *Group Ledger* with member invitation features and on-chain shared balance tracking.
 4. **🟢 Green Belt (Production-Ready):** AI refinements, multi-sig transaction authorization features (Requires Approval), and *Dashboard Analytics*.
 5. **🔵 Blue Belt (Growth):** Focus on onboarding the first 50+ users and iterating based on real *feedback*.
@@ -45,7 +45,6 @@ KasChain is built incrementally using the Rise In Belt progression system:
 
 ### 📸 Screenshot: Wallet Options Available
 
-*(Please capture the wallet modal connecting Freighter, xBull, and Albedo and save it as `wallet-options.png` in the root folder).*
 ![Wallet Options](./wallet-options.png)
 
 ## 💻 How to Run Locally

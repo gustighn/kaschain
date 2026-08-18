@@ -37,6 +37,17 @@ KasChain is built incrementally using the Rise In Belt progression system:
 5. **🔵 Blue Belt (Growth):** Focus on onboarding the first 50+ users and iterating based on real *feedback*.
 6. **⚫️ Black Belt (Mainnet):** Launch on Stellar Mainnet, security audit, and addition of *advanced* features (real payments/fiat-on-ramp).
 
+## 🏆 Level 2 Submission Requirements
+
+- **Live Demo Link:** *Local Testing* (Currently running locally)
+- **Deployed Contract Address:** `CD7P2GXMW4QJHB7IMMYHU7AQI2MQWME6G47755C47N4MPWBBLVQ6KDHL`
+- **Contract Call Transaction Hash:** `59930326e8c79facae1050b9567d7bf6576df43a57fb07a94bd25eb04b725310`
+
+### 📸 Screenshot: Wallet Options Available
+
+*(Please capture the wallet modal connecting Freighter, xBull, and Albedo and save it as `wallet-options.png` in the root folder).*
+![Wallet Options](./wallet-options.png)
+
 ## 💻 How to Run Locally
 
 ### Prerequisites

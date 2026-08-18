@@ -10,8 +10,7 @@ const rpcServer = new rpc.Server(rpcUrl);
 
 export const recordTransactionOnChain = async (publicKey, amount, flow) => {
   if (!contractId) {
-    console.warn("Contract ID not set, skipping on-chain logging.");
-    return null;
+    throw new Error("Contract ID is not configured. Please deploy the contract and set VITE_CONTRACT_ID in .env.");
   }
 
   try {

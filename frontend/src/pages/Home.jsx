@@ -37,6 +37,16 @@ const Home = () => {
     }
   }, [publicKey]);
 
+  // Auto-dismiss success status after 5 seconds
+  useEffect(() => {
+    if (status.type === 'success' && status.message) {
+      const timer = setTimeout(() => {
+        setStatus({ type: '', message: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   const handleGenerateWallet = () => {
     const { publicKey, secretKey } = generateWallet();
     setPublicKey(publicKey);

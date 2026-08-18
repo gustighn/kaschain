@@ -11,21 +11,20 @@
 
 By combining artificial intelligence to facilitate data input through natural conversation (NLP) and the reliability of the Stellar blockchain for immutable data transparency, KasChain elevates financial management to a more modern, secure, and user-friendly level.
 
-## 🚀 Key Features
+## 🚀 Key Features (Level 2)
 
-- **🤖 AI-Powered Input:** Forget complicated recording forms. Just type your transaction as if you are chatting (e.g., *"Bought lunch for 35k"*), and Gemini AI will extract the data into a structured JSON format.
-- **🔗 Web3 Transparency:** Every critical transaction is recorded as a *hash* into a *Smart Contract* on the Stellar network (Soroban), ensuring the organization's financial history cannot be unilaterally altered.
-- **💳 Seamless Wallet Integration:** Connect seamlessly using Freighter Wallet. Supports generating new *keypairs* as well as integrating with existing wallets.
-- **🧊 Modern Glassmorphism UI:** A premium, transparent, and responsive user interface that represents the core value of the application: **Transparency**.
+- **🤖 AI-Powered Input:** Type your transaction as if you are chatting (e.g., *"Bought lunch for 35k"*), and Gemini AI extracts the data into a structured JSON format.
+- **🔗 Web3 Transparency (Smart Contract):** Every critical transaction is recorded into a Soroban Smart Contract on the Stellar Testnet. Features **custom errors** for invalid amounts and flows.
+- **💳 Multi-Wallet Support:** Connect seamlessly using the Stellar Wallets Kit. Supports Freighter, xBull, and Albedo.
+- **🔥 Firebase Firestore:** Real-time data synchronization for the user's dashboard.
+- **🧊 Modern Glassmorphism UI:** A premium, transparent, and responsive user interface representing Transparency.
 
 ## 🛠 Tech Stack
 
-- **Frontend:** React (Vite), Tailwind CSS, React Router v6
-- **AI Integration:** Google Gemini API (`gemini-2.5-pro`)
-- **Blockchain / Web3:** Stellar Testnet (via Soroban Smart Contracts), `@stellar/stellar-sdk`
-- **Wallet Provider:** Freighter API (`@stellar/freighter-api`)
+- **Frontend:** React (Vite), Tailwind CSS
+- **AI Integration:** Google Gemini API (`gemini-2.5-flash`)
+- **Blockchain / Web3:** Stellar Testnet (Soroban), `@stellar/stellar-sdk`, `@creit.tech/stellar-wallets-kit`
 - **Database / Sync:** Firebase Firestore (Realtime Sync)
-- **Styling:** Custom CSS Variables with *Glassmorphism* effects
 
 ## 🗺 Development Roadmap (Belt System)
 

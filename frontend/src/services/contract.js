@@ -49,13 +49,24 @@ export const recordTransactionOnChain = async (publicKey, amount, flow) => {
     
     const response = await rpcServer.sendTransaction(transactionToSubmit);
     if (response.status === "ERROR") {
-      throw new Error("RPC Error: " + JSON.stringify(response.errorResult || response));
+      const errStr = JSON.stringify(response.errorResult || response);
+      if (errStr.includes("Error(Contract, #1)")) {
+        throw new Error("Invalid Amount: Amount must be greater than zero.");
+      } else if (errStr.includes("Error(Contract, #2)")) {
+        throw new Error("Invalid Flow: Must be 'income' or 'expense'.");
+      } else if (errStr.includes("Error(Contract, #3)")) {
+        throw new Error("Not Authorized.");
+      }
+      throw new Error("RPC Error: " + errStr);
     }
     
     return response.hash;
     
   } catch (error) {
     console.error("Failed to record transaction on chain:", error);
+    if (error.message.includes("Invalid Amount") || error.message.includes("Invalid Flow") || error.message.includes("Not Authorized") || error.message.includes("RPC Error")) {
+      throw error;
+    }
     // Silent fail for on-chain log as it might be complex or testnet issues, but throw if required
     throw new Error("Failed to record transaction in smart contract: " + error.message);
   }

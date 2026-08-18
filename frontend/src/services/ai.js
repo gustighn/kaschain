@@ -28,7 +28,17 @@ export const extractTransactionData = async (userInput) => {
     const result = await model.generateContent(`${SYSTEM_PROMPT}\n\nPesan: ${userInput}`);
     const responseText = result.response.text().trim();
     const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-    return JSON.parse(cleanJson);
+    const parsedData = JSON.parse(cleanJson);
+    
+    if (parsedData.flow !== 'income' && parsedData.flow !== 'expense') {
+      throw new Error("AI returned invalid flow type. Must be income or expense.");
+    }
+    
+    if (typeof parsedData.amount !== 'number' || parsedData.amount <= 0) {
+      throw new Error("AI returned invalid amount. Must be greater than zero.");
+    }
+    
+    return parsedData;
   } catch (error) {
     console.error("Error extracting transaction:", error);
     throw new Error(`AI Error: ${error.message || "Failed to extract transaction data"}`);
